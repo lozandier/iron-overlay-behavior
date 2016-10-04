@@ -219,6 +219,11 @@ context. You should place this element as a child of `<body>` whenever possible.
         ':not([disabled]):not([tabindex="-1"])';
 
       var focusables = Polymer.dom(this).querySelectorAll(selector);
+      // In Polymer 2.0 & native ShadowDOM, querySelectorAll() returns a NodeList,
+      // so ensure `focusables` is an array since we need Array's splice & sort.
+      if (focusables instanceof Array === false) {
+        focusables = Array.prototype.slice.apply(focusables);
+      }
       if (this.tabIndex >= 0) {
         // Insert at the beginning because we might have all elements with tabIndex = 0,
         // and the overlay should be the first of the list.
